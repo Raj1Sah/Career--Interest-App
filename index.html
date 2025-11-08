@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Interest Discovery App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Auth Page -->
+    <div id="authPage" class="page-container">
+        <div class="theme-toggle-btn" onclick="toggleTheme()">
+            <span id="themeIcon">🌙</span>
+        </div>
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <span class="logo-icon">🏆</span>
+                </div>
+                <h2>Career Discovery</h2>
+                <p>Find your perfect career path</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <div class="auth-form">
+                <input type="text" id="nameInput" placeholder="Full Name" style="display: none;">
+                <input type="email" id="emailInput" placeholder="Email" required>
+                <input type="password" id="passwordInput" placeholder="Password" required>
+                <button class="btn-primary" onclick="handleAuth()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="homePage" class="page-container" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <span class="logo-icon">🏆</span>
+                    <span>Career Discovery</span>
+                </div>
+                <div class="nav-menu desktop-menu">
+                    <button class="nav-link" onclick="goToPage('home')">
+                        <span>🏠</span> Home
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span id="navThemeIcon">🌙</span>
+                    </button>
+                    <div class="nav-user">
+                        <span>👤</span>
+                        <span id="userName"></span>
+                        <button class="logout-btn" onclick="logout()">🚪</button>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <div id="mobileMenu" class="mobile-menu">
+                <button onclick="goToPage('home'); toggleMobileMenu()">🏠 Home</button>
+                <button onclick="toggleTheme(); toggleMobileMenu()">
+                    <span id="mobileThemeIcon">🌙</span> Theme
+                </button>
+                <div class="mobile-user">
+                    <span id="mobileUserName"></span>
+                    <button onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="hero-section animate-fade-in">
+                <div class="sparkle-icon">✨</div>
+                <h1>Discover Your Perfect Career Path</h1>
+                <p>Take our interactive quiz and get personalized career recommendations</p>
+                <button class="btn-primary btn-large" onclick="startQuiz()">
+                    Start Career Quiz →
+                </button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card animate-slide-up" style="animation-delay: 0ms">
+                    <div class="feature-icon purple">📚</div>
+                    <h3>Interactive Quiz</h3>
+                    <p>Answer thoughtful questions about your interests and preferences</p>
+                </div>
+                <div class="feature-card animate-slide-up" style="animation-delay: 100ms">
+                    <div class="feature-icon blue">📈</div>
+                    <h3>Personalized Results</h3>
+                    <p>Get career matches based on your unique profile</p>
+                </div>
+                <div class="feature-card animate-slide-up" style="animation-delay: 200ms">
+                    <div class="feature-icon pink">📥</div>
+                    <h3>Download Report</h3>
+                    <p>Export your career analysis as a PDF</p>
+                </div>
+            </div>
+
+            <div id="previousResults" class="results-card" style="display: none;">
+                <h2>Your Previous Results</h2>
+                <p>You have completed the career assessment. View your personalized career recommendations.</p>
+                <button class="btn-secondary" onclick="viewResults()">View Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quizPage" class="page-container" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <span class="logo-icon">🏆</span>
+                    <span>Career Discovery</span>
+                </div>
+                <div class="nav-menu desktop-menu">
+                    <button class="nav-link" onclick="goToPage('home')">
+                        <span>🏠</span> Home
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <div class="nav-user">
+                        <span>👤</span>
+                        <span class="user-name-display"></span>
+                        <button class="logout-btn" onclick="logout()">🚪</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="quiz-content">
+            <div class="quiz-card animate-scale">
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <span id="progressText">Question 1 of 12</span>
+                        <span id="progressPercent">8%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <h2 id="questionText" class="animate-slide-right"></h2>
+                    <div id="optionsContainer" class="options-container"></div>
+                </div>
+
+                <button id="backBtn" class="btn-back" onclick="previousQuestion()" style="display: none;">
+                    ← Previous Question
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page-container" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <span class="logo-icon">🏆</span>
+                    <span>Career Discovery</span>
+                </div>
+                <div class="nav-menu desktop-menu">
+                    <button class="nav-link" onclick="goToPage('home')">
+                        <span>🏠</span> Home
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <div class="nav-user">
+                        <span>👤</span>
+                        <span class="user-name-display"></span>
+                        <button class="logout-btn" onclick="logout()">🚪</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="results-content">
+            <div class="results-header animate-fade-in">
+                <h1>Your Career Matches</h1>
+                <p>Based on your interests and preferences</p>
+                <button class="btn-primary" onclick="downloadPDF()">
+                    📥 Download Report
+                </button>
+            </div>
+
+            <div id="interestChart" class="interest-chart"></div>
+            <div id="careersContainer" class="careers-container"></div>
+
+            <div class="retake-section">
+                <button class="btn-outline" onclick="retakeQuiz()">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
